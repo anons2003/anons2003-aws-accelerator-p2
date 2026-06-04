@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>K8s Web Demo</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="status">
+          <span class="status-dot" aria-hidden="true"></span>
+          Running inside Kubernetes
+        </div>
+        <h1 id="page-title">K8s Web Demo</h1>
+        <p>
+          A tiny nginx-powered app for practicing Docker, minikube, Kubernetes
+          Services, and AWS ALB routing.
+        </p>
+        <div class="actions">
+          <a href="#checks" class="button primary">View Checks</a>
+          <a href="#deploy" class="button secondary">Deploy Flow</a>
+        </div>
+      </section>
+
+      <section id="checks" class="panel" aria-labelledby="checks-title">
+        <h2 id="checks-title">Runtime Checks</h2>
+        <div class="grid">
+          <article>
+            <span class="label">Container</span>
+            <strong>nginx</strong>
+            <p>Static files are served by nginx inside a container image.</p>
+          </article>
+          <article>
+            <span class="label">Kubernetes</span>
+            <strong>Deployment + Service</strong>
+            <p>The app runs as Pods and is exposed with a NodePort Service.</p>
+          </article>
+          <article>
+            <span class="label">AWS Path</span>
+            <strong>ALB -> EC2 -> NodePort</strong>
+            <p>Later, an ALB can forward traffic to the EC2 host port.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="deploy" class="panel compact" aria-labelledby="deploy-title">
+        <h2 id="deploy-title">Deploy Flow</h2>
+        <ol>
+          <li>Build the Docker image.</li>
+          <li>Load the image into minikube.</li>
+          <li>Apply the Kubernetes manifests.</li>
+          <li>Open the Service URL and verify this page.</li>
+        </ol>
+      </section>
+    </main>
+  </body>
+</html>

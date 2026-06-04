@@ -1,0 +1,22 @@
+.DS_Store
+
+# Local archives and copied credentials
+*.tar
+*.tar.gz
+*.pem
+ec2-user@*
+
+# Terraform runtime files
+**/.terraform/
+**/.generated/
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/*.tfvars
+**/*.tfvars.json
+**/crash.log
+**/crash.*.log
+
+# Editor/runtime noise
+.idea/
+.vscode/
+node_modules/
