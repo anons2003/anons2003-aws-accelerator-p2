@@ -381,6 +381,27 @@ Target Group: instance, HTTP:30080
 Target Health: Healthy
 ```
 
+## Evidence
+
+Các ảnh bằng chứng nằm trong thư mục `evidence/`:
+
+```text
+evidence/
+  web_result.png
+  Resourcemap.png
+  Destroy.png
+```
+
+- [web_result.png](evidence/web_result.png): browser mở được URL public của ALB và trả về trang web demo.
+- [Resourcemap.png](evidence/Resourcemap.png): resource map trên AWS thể hiện các resource chính của stack.
+- [Destroy.png](evidence/Destroy.png): bằng chứng đã dọn tài nguyên sau khi demo xong.
+
+Khi nộp bài, có thể dùng các ảnh này để chứng minh:
+
+- App truy cập được từ Internet qua ALB.
+- App chạy theo kiến trúc EC2 + minikube + Kubernetes + NodePort + ALB.
+- Stack được dọn sạch sau khi hoàn thành để tránh tốn chi phí.
+
 ## Deploy thủ công không dùng Terraform
 
 Nếu làm tay trên AWS Console, thứ tự đúng là:
