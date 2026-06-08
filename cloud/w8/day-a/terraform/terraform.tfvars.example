@@ -1,0 +1,11 @@
+aws_region   = "us-east-1"
+project_name = "final-web-app"
+
+# Replace with your public IP CIDR only when SSH access is needed.
+# Example: ["203.0.113.10/32"]
+ssh_cidr_blocks = []
+
+tags = {
+  Course = "W8"
+  Owner  = "student"
+}

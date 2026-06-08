@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${project_name}</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: Arial, sans-serif;
+        color: #102033;
+        background: #eef6fb;
+      }
+
+      main {
+        width: min(760px, calc(100vw - 48px));
+        padding: 32px;
+        background: #ffffff;
+        border-top: 8px solid #1297a8;
+        box-shadow: 0 18px 44px rgba(16, 32, 51, 0.16);
+      }
+
+      h1 {
+        margin: 0 0 16px;
+        font-size: 32px;
+      }
+
+      dl {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 12px 18px;
+        margin: 0;
+      }
+
+      dt {
+        font-weight: 700;
+      }
+
+      dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>${project_name} is running on AWS</h1>
+      <dl>
+        <dt>Compute</dt>
+        <dd>EC2 web server in a public subnet</dd>
+        <dt>Database</dt>
+        <dd>RDS MySQL in private subnets: ${db_endpoint}</dd>
+        <dt>Assets</dt>
+        <dd>Private S3 bucket: ${bucket_name}</dd>
+      </dl>
+    </main>
+  </body>
+</html>

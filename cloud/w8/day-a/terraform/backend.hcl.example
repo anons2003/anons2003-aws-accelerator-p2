@@ -1,0 +1,5 @@
+bucket         = "REPLACE_WITH_UNIQUE_TERRAFORM_STATE_BUCKET"
+key            = "final-project/web-app/terraform.tfstate"
+region         = "us-east-1"
+dynamodb_table = "REPLACE_WITH_TERRAFORM_LOCK_TABLE"
+encrypt        = true
