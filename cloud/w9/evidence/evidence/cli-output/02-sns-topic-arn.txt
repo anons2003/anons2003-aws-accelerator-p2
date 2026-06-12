@@ -1,0 +1,1 @@
+arn:aws:sns:us-east-1:459858400912:w9-cpu-alarm-topic

@@ -1,0 +1,10 @@
+Created resources:
+- SNS topic: arn:aws:sns:us-east-1:459858400912:w9-cpu-alarm-topic
+- CloudWatch alarm: w9-ec2-cpu-high-80
+- Email subscription target: truclt0311@gmail.com
+
+Next steps:
+1. Open truclt0311@gmail.com inbox and confirm the SNS subscription email.
+2. Capture AWS Console screenshots listed in evidence/evidence-pack.md.
+3. Optional email test after confirmation:
+   aws cloudwatch set-alarm-state --alarm-name w9-ec2-cpu-high-80 --state-value ALARM --state-reason "W9 evidence test" --region us-east-1 --profile monitoring
