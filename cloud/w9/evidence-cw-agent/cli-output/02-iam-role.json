@@ -1,0 +1,10 @@
+{
+    "Role": {
+        "RoleName": "CloudWatchAgentServerRole",
+        "Arn": "arn:aws:iam::459858400912:role/CloudWatchAgentServerRole",
+        "CreateDate": "2026-06-12T09:46:17+00:00"
+    },
+    "AttachedPolicy": "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
+    "InstanceProfile": "arn:aws:iam::459858400912:instance-profile/CloudWatchAgentServerProfile",
+    "AttachedTo": "i-0519c8961b80e32ee"
+}
