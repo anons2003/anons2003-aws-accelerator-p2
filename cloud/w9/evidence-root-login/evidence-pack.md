@@ -208,6 +208,8 @@ Already saved:
 evidence-root-login/screenshots/00-requirement-reference.png
 ```
 
+![00 - Requirement Reference](screenshots/00-requirement-reference.png)
+
 Show the lab title: `Alert on AWS Root Account Login`.
 
 ### 01 - CLI Identity
@@ -223,6 +225,8 @@ Save:
 ```text
 evidence-root-login/screenshots/01-cli-identity.png
 ```
+
+![01 - CLI Identity](screenshots/01-cli-identity.png)
 
 Must show account `459858400912` and ARN `arn:aws:iam::459858400912:root`.
 
@@ -241,6 +245,8 @@ Save:
 evidence-root-login/screenshots/02-sns-topic-and-subscription.png
 ```
 
+![02 - SNS Topic and Subscription](screenshots/02-sns-topic-and-subscription.png)
+
 Must show topic ARN, protocol `email`, and endpoint `truclt0311@gmail.com`.
 
 ### 03 - SNS Email Confirmed
@@ -252,6 +258,8 @@ Save:
 ```text
 evidence-root-login/screenshots/03-sns-email-confirmed.png
 ```
+
+![03 - SNS Email Confirmed](screenshots/03-sns-email-confirmed.png)
 
 Must show either the confirmation success page or subscription status `Confirmed`.
 
@@ -268,6 +276,8 @@ Save:
 ```text
 evidence-root-login/screenshots/04-cloudtrail-trail-enabled.png
 ```
+
+![04 - CloudTrail Trail Enabled](screenshots/04-cloudtrail-trail-enabled.png)
 
 Must show:
 
@@ -290,6 +300,8 @@ Save:
 evidence-root-login/screenshots/05-cloudwatch-log-group.png
 ```
 
+![05 - CloudWatch Log Group](screenshots/05-cloudwatch-log-group.png)
+
 Must show log group name and CloudTrail log streams after events arrive.
 
 ### 06 - Metric Filter Root Login
@@ -305,6 +317,8 @@ Save:
 ```text
 evidence-root-login/screenshots/06-metric-filter-root-login.png
 ```
+
+![06 - Metric Filter Root Login](screenshots/06-metric-filter-root-login.png)
 
 Must show:
 
@@ -327,6 +341,8 @@ Save:
 evidence-root-login/screenshots/07-cloudwatch-alarm.png
 ```
 
+![07 - CloudWatch Alarm](screenshots/07-cloudwatch-alarm.png)
+
 Must show:
 
 - Alarm name.
@@ -344,6 +360,8 @@ Save:
 ```text
 evidence-root-login/screenshots/08-alarm-sns-action.png
 ```
+
+![08 - Alarm SNS Action](screenshots/08-alarm-sns-action.png)
 
 Must show SNS topic action for `w9-root-login-alert-topic`.
 
@@ -366,6 +384,8 @@ Save:
 evidence-root-login/screenshots/09-alarm-test-state.png
 ```
 
+![09 - Alarm Test State](screenshots/09-alarm-test-state.png)
+
 Must show the terminal command or CloudWatch alarm state `In alarm`.
 
 ### 10 - Email Alert Received
@@ -377,6 +397,8 @@ Save:
 ```text
 evidence-root-login/screenshots/10-email-alert-received.png
 ```
+
+![10 - Email Alert Received](screenshots/10-email-alert-received.png)
 
 Must show:
 
