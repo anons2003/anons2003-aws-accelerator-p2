@@ -1,0 +1,31 @@
+{
+    "MetricAlarms": [
+        {
+            "AlarmName": "w9-root-account-login-alert",
+            "AlarmArn": "arn:aws:cloudwatch:ap-southeast-1:459858400912:alarm:w9-root-account-login-alert",
+            "AlarmDescription": "W9 evidence: alert when root account activity is detected by CloudTrail.",
+            "AlarmConfigurationUpdatedTimestamp": "2026-06-15T22:14:03.535000+07:00",
+            "ActionsEnabled": true,
+            "OKActions": [],
+            "AlarmActions": [
+                "arn:aws:sns:ap-southeast-1:459858400912:w9-root-login-alert-topic"
+            ],
+            "InsufficientDataActions": [],
+            "StateValue": "INSUFFICIENT_DATA",
+            "StateReason": "Unchecked: Initial alarm creation",
+            "StateUpdatedTimestamp": "2026-06-15T22:14:03.535000+07:00",
+            "MetricName": "RootAccountLoginCount",
+            "Namespace": "Security",
+            "Statistic": "Sum",
+            "Dimensions": [],
+            "Period": 300,
+            "EvaluationPeriods": 1,
+            "DatapointsToAlarm": 1,
+            "Threshold": 1.0,
+            "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+            "TreatMissingData": "notBreaching",
+            "StateTransitionedTimestamp": "2026-06-15T22:14:03.535000+07:00"
+        }
+    ],
+    "CompositeAlarms": []
+}
