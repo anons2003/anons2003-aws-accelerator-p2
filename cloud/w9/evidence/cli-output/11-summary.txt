@@ -1,0 +1,17 @@
+Created or updated root login alert resources:
+- Account: 459858400912
+- Region: ap-southeast-1
+- SNS topic: arn:aws:sns:ap-southeast-1:459858400912:w9-root-login-alert-topic
+- SNS email endpoint: truclt0311@gmail.com
+- S3 bucket: w9-cloudtrail-459858400912-ap-southeast-1
+- CloudTrail trail: w9-root-login-trail
+- CloudWatch Logs log group: /aws/cloudtrail/w9-root-login
+- Metric filter: w9-root-account-login
+- Metric: Security/RootAccountLoginCount
+- Alarm: w9-root-account-login-alert
+
+Next steps:
+1. Confirm the SNS subscription email sent to truclt0311@gmail.com.
+2. Capture the screenshots listed in evidence/evidence-pack.md.
+3. For a safe alarm-delivery test, use CloudWatch set-alarm-state before doing any real root-account login test:
+   aws cloudwatch set-alarm-state --alarm-name w9-root-account-login-alert --state-value ALARM --state-reason "W9 evidence test" --region ap-southeast-1 --profile monitoring

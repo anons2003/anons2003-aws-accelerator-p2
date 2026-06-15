@@ -1,0 +1,1 @@
+arn:aws:logs:ap-southeast-1:459858400912:log-group:/aws/cloudtrail/w9-root-login:*

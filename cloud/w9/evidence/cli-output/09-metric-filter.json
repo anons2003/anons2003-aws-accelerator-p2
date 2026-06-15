@@ -1,0 +1,18 @@
+{
+    "metricFilters": [
+        {
+            "filterName": "w9-root-account-login",
+            "filterPattern": "{ $.userIdentity.type = \"Root\" && $.userIdentity.invokedBy NOT EXISTS && $.eventType != \"AwsServiceEvent\" }",
+            "metricTransformations": [
+                {
+                    "metricName": "RootAccountLoginCount",
+                    "metricNamespace": "Security",
+                    "metricValue": "1"
+                }
+            ],
+            "creationTime": 1781536441806,
+            "logGroupName": "/aws/cloudtrail/w9-root-login",
+            "applyOnTransformedLogs": false
+        }
+    ]
+}

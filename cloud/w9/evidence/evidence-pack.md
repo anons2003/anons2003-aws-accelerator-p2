@@ -1,338 +1,417 @@
-# Bộ Bằng Chứng W9 - Cảnh Báo CPU Gửi Email Qua SNS
+# W9 Evidence Pack - Alert on AWS Root Account Login
 
-## Mục Tiêu
+## Objective
 
-Tạo bằng chứng cho kịch bản thực hành:
+Build the monitoring flow for the lab:
 
-- Gửi cảnh báo email khi CPU của EC2 instance vượt quá 80%.
-- Dùng Amazon SNS để gửi thông báo qua email.
-- Dùng Amazon CloudWatch alarm theo dõi metric `CPUUtilization` của EC2.
-- Dùng AWS CLI với profile `monitoring`.
+- Enable CloudTrail and deliver CloudTrail events to CloudWatch Logs.
+- Create a CloudWatch Logs metric filter for root account usage.
+- Create a CloudWatch alarm when root activity count is greater than or equal to `1`.
+- Notify by SNS email.
+- Use AWS CLI with profile `monitoring`.
 
-## Thông Tin Tài Nguyên Đã Tạo
+This pack uses CLI because the assignment asks for CLI-based creation. Terraform is better for repeatable production IaC, but for this evidence lab the CLI gives a clean command-by-command audit trail and matches the requested workflow.
 
-| Tài nguyên | Giá trị |
-|---|---|
-| AWS Account | `459858400912` |
-| Region | `us-east-1` |
-| EC2 Instance ID | `i-0519c8961b80e32e` |
-| SNS Topic | `w9-cpu-alarm-topic` |
-| SNS Topic ARN | `arn:aws:sns:us-east-1:459858400912:w9-cpu-alarm-topic` |
-| CloudWatch Alarm | `w9-ec2-cpu-high-80` |
-| Alarm ARN | `arn:aws:cloudwatch:us-east-1:459858400912:alarm:w9-ec2-cpu-high-80` |
-| Email nhận cảnh báo | `truclt0311@gmail.com` |
-| Ngưỡng CPU | `> 80%` |
-| Chu kỳ | `300 giây (5 phút)` |
-| Thời gian tạo | `2026-06-12T16:16:05 +07:00` |
+## Confirmed Identity
 
-## Kết Quả CLI Thực Tế
+Run:
 
-### 01 - Xác thực danh tính AWS
+```bash
+aws sts get-caller-identity --profile monitoring
+```
+
+Expected:
 
 ```json
 {
-    "UserId": "459858400912",
-    "Account": "459858400912",
-    "Arn": "arn:aws:iam::459858400912:root"
+  "UserId": "459858400912",
+  "Account": "459858400912",
+  "Arn": "arn:aws:iam::459858400912:root"
 }
 ```
 
-### 02 - SNS Topic ARN
-
-```
-arn:aws:sns:us-east-1:459858400912:w9-cpu-alarm-topic
-```
-
-### 03 - SNS Email Subscription
-
-```json
-{
-    "SubscriptionArn": "pending confirmation"
-}
-```
-
-> Trạng thái `pending confirmation` — cần vào hộp thư `truclt0311@gmail.com` bấm **Confirm subscription**.
-
-### 04 - CloudWatch Alarm (describe-alarms)
-
-```json
-{
-    "MetricAlarms": [
-        {
-            "AlarmName": "w9-ec2-cpu-high-80",
-            "AlarmArn": "arn:aws:cloudwatch:us-east-1:459858400912:alarm:w9-ec2-cpu-high-80",
-            "AlarmDescription": "W9 evidence: send SNS email when EC2 CPUUtilization is greater than 80% for 300 seconds.",
-            "AlarmConfigurationUpdatedTimestamp": "2026-06-12T16:16:05.292000+07:00",
-            "ActionsEnabled": true,
-            "AlarmActions": [
-                "arn:aws:sns:us-east-1:459858400912:w9-cpu-alarm-topic"
-            ],
-            "StateValue": "INSUFFICIENT_DATA",
-            "StateReason": "Unchecked: Initial alarm creation",
-            "MetricName": "CPUUtilization",
-            "Namespace": "AWS/EC2",
-            "Statistic": "Average",
-            "Dimensions": [
-                {
-                    "Name": "InstanceId",
-                    "Value": "i-0519c8961b80e32e"
-                }
-            ],
-            "Period": 300,
-            "Unit": "Percent",
-            "EvaluationPeriods": 1,
-            "DatapointsToAlarm": 1,
-            "Threshold": 80.0,
-            "ComparisonOperator": "GreaterThanThreshold",
-            "TreatMissingData": "missing"
-        }
-    ]
-}
-```
-
-## Cấu Trúc Thư Mục Thực Tế
+## Evidence Folder
 
 ```text
 evidence/
   evidence-pack.md
   screenshots/
-    00-requirement-reference.png        ✅ đã có
-    01-cli-identity.png                 ✅ đã có
-    02-sns-topic-created.png            ✅ đã có
-    03-sns-email-subscription.png       ✅ đã có
-    04-email-subscription-confirmed.png ✅ đã có
-    05-cloudwatch-alarm-created.png     ✅ đã có
-    06-alarm-notification-action.png    ✅ đã có
-    07-alarm-state-test.png             ✅ đã có
-    08-email-alert-received.png         ✅ đã có
+    00-requirement-reference.png
+    01-cli-identity.png
+    02-sns-topic-and-subscription.png
+    03-sns-email-confirmed.png
+    04-cloudtrail-trail-enabled.png
+    05-cloudwatch-log-group.png
+    06-metric-filter-root-login.png
+    07-cloudwatch-alarm.png
+    08-alarm-sns-action.png
+    09-alarm-test-state.png
+    10-email-alert-received.png
   src/
-    create_cpu_alarm_resources.sh
-  evidence/
-    cli-output/
-      01-sts-get-caller-identity.json   ✅ đã có
-      02-sns-topic-arn.txt              ✅ đã có
-      03-sns-subscribe.json             ✅ đã có
-      04-describe-alarm.json            ✅ đã có
-      05-next-steps.txt                 ✅ đã có
+    create_root_login_alert.sh
+  cli-output/
+    01-sts-get-caller-identity.json
+    02-sns-topic-arn.txt
+    03-sns-subscribe.json
+    04-create-bucket.json
+    05-log-group-arn.txt
+    06-create-role.json
+    07-upsert-trail.json
+    08-trail-status.json
+    09-metric-filter.json
+    10-alarm.json
+    11-summary.txt
 ```
 
-## Bằng Chứng - Ảnh Chụp Màn Hình
+## CLI Source
 
-### 00 - Yêu Cầu Đề Bài
+Script:
 
-![00 - Yêu cầu đề bài](screenshots/00-requirement-reference.png)
+```bash
+evidence/src/create_root_login_alert.sh
+```
 
----
+Make executable:
 
-### 01 - Danh Tính CLI
+```bash
+chmod +x evidence/src/create_root_login_alert.sh
+```
 
-Lệnh:
+Set inputs:
+
+```bash
+export AWS_PROFILE_NAME="monitoring"
+export AWS_REGION="ap-southeast-1"
+export ALERT_EMAIL="truclt0311@gmail.com"
+```
+
+Run:
+
+```bash
+./evidence/src/create_root_login_alert.sh
+```
+
+The script creates or updates:
+
+- SNS topic `w9-root-login-alert-topic`.
+- SNS email subscription for `truclt0311@gmail.com`.
+- S3 bucket for CloudTrail logs.
+- CloudWatch Logs log group `/aws/cloudtrail/w9-root-login`.
+- IAM role for CloudTrail to write to CloudWatch Logs.
+- Multi-region CloudTrail trail `w9-root-login-trail`.
+- CloudWatch Logs metric filter `w9-root-account-login`.
+- CloudWatch alarm `w9-root-account-login-alert`.
+
+Important: confirm the SNS email subscription before testing alarm notification delivery.
+
+## Important Filter Pattern
+
+CloudWatch Logs metric filter pattern:
+
+```text
+{ $.userIdentity.type = "Root" && $.userIdentity.invokedBy NOT EXISTS && $.eventType != "AwsServiceEvent" }
+```
+
+Metric:
+
+```text
+Namespace: Security
+Metric name: RootAccountLoginCount
+Metric value: 1
+Statistic: Sum
+Period: 5 minutes
+Threshold: >= 1
+```
+
+## Manual CLI Commands
+
+Use this section if you need to explain the CLI flow in the submission.
+
+```bash
+export AWS_PROFILE_NAME="monitoring"
+export AWS_REGION="ap-southeast-1"
+export ALERT_EMAIL="truclt0311@gmail.com"
+
+aws sts get-caller-identity --profile "$AWS_PROFILE_NAME"
+```
+
+Create the full lab:
+
+```bash
+chmod +x evidence/src/create_root_login_alert.sh
+./evidence/src/create_root_login_alert.sh
+```
+
+Check CloudTrail:
+
+```bash
+aws cloudtrail get-trail-status \
+  --name w9-root-login-trail \
+  --region "$AWS_REGION" \
+  --profile "$AWS_PROFILE_NAME"
+```
+
+Check metric filter:
+
+```bash
+aws logs describe-metric-filters \
+  --log-group-name /aws/cloudtrail/w9-root-login \
+  --filter-name-prefix w9-root-account-login \
+  --region "$AWS_REGION" \
+  --profile "$AWS_PROFILE_NAME"
+```
+
+Check alarm:
+
+```bash
+aws cloudwatch describe-alarms \
+  --alarm-names w9-root-account-login-alert \
+  --region "$AWS_REGION" \
+  --profile "$AWS_PROFILE_NAME"
+```
+
+Safe notification test after confirming SNS email:
+
+```bash
+aws cloudwatch set-alarm-state \
+  --alarm-name w9-root-account-login-alert \
+  --state-value ALARM \
+  --state-reason "W9 evidence test" \
+  --region "$AWS_REGION" \
+  --profile "$AWS_PROFILE_NAME"
+```
+
+Reset state:
+
+```bash
+aws cloudwatch set-alarm-state \
+  --alarm-name w9-root-account-login-alert \
+  --state-value OK \
+  --state-reason "W9 evidence reset" \
+  --region "$AWS_REGION" \
+  --profile "$AWS_PROFILE_NAME"
+```
+
+## Screenshot Instructions
+
+Save every screenshot under:
+
+```text
+evidence/screenshots/
+```
+
+### 00 - Requirement Reference
+
+Already saved:
+
+```text
+evidence/screenshots/00-requirement-reference.png
+```
+
+Show the lab title: `Alert on AWS Root Account Login`.
+
+### 01 - CLI Identity
+
+Run:
+
 ```bash
 aws sts get-caller-identity --profile monitoring
 ```
 
-![01 - Danh tính CLI](screenshots/01-cli-identity.png)
+Save:
 
----
+```text
+evidence/screenshots/01-cli-identity.png
+```
 
-### 02 - SNS Topic Đã Tạo
+Must show account `459858400912` and ARN `arn:aws:iam::459858400912:root`.
 
-AWS Console: `SNS → Topics → w9-cpu-alarm-topic`
+### 02 - SNS Topic and Subscription
 
-![02 - SNS Topic đã tạo](screenshots/02-sns-topic-created.png)
+Console:
 
----
+```text
+Amazon SNS -> Topics -> w9-root-login-alert-topic
+Amazon SNS -> Subscriptions
+```
 
-### 03 - SNS Email Subscription
+Save:
 
-AWS Console: `SNS → Subscriptions`
+```text
+evidence/screenshots/02-sns-topic-and-subscription.png
+```
 
-![03 - SNS Email Subscription](screenshots/03-sns-email-subscription.png)
+Must show topic ARN, protocol `email`, and endpoint `truclt0311@gmail.com`.
 
----
+### 03 - SNS Email Confirmed
 
-### 04 - Email Subscription Đã Xác Nhận
+Open the email from AWS Notifications and click the confirmation link.
 
-![04 - Email Subscription Confirmed](screenshots/04-email-subscription-confirmed.png)
+Save:
 
----
+```text
+evidence/screenshots/03-sns-email-confirmed.png
+```
 
-### 05 - CloudWatch Alarm Đã Tạo
+Must show either the confirmation success page or subscription status `Confirmed`.
 
-AWS Console: `CloudWatch → Alarms → All alarms → w9-ec2-cpu-high-80`
+### 04 - CloudTrail Trail Enabled
 
-![05 - CloudWatch Alarm đã tạo](screenshots/05-cloudwatch-alarm-created.png)
+Console:
 
----
+```text
+CloudTrail -> Trails -> w9-root-login-trail
+```
 
-### 06 - Hành Động Thông Báo Alarm
+Save:
 
-Chi tiết alarm → phần **Actions / Notification**
+```text
+evidence/screenshots/04-cloudtrail-trail-enabled.png
+```
 
-![06 - Alarm Notification Action](screenshots/06-alarm-notification-action.png)
+Must show:
 
----
+- Trail name.
+- Logging enabled.
+- Multi-region trail enabled.
+- CloudWatch Logs integration points to `/aws/cloudtrail/w9-root-login`.
 
-### 07 - Test Trạng Thái Alarm
+### 05 - CloudWatch Log Group
 
-Lệnh:
+Console:
+
+```text
+CloudWatch -> Logs -> Log groups -> /aws/cloudtrail/w9-root-login
+```
+
+Save:
+
+```text
+evidence/screenshots/05-cloudwatch-log-group.png
+```
+
+Must show log group name and CloudTrail log streams after events arrive.
+
+### 06 - Metric Filter Root Login
+
+Console:
+
+```text
+CloudWatch -> Logs -> Log groups -> /aws/cloudtrail/w9-root-login -> Metric filters
+```
+
+Save:
+
+```text
+evidence/screenshots/06-metric-filter-root-login.png
+```
+
+Must show:
+
+- Filter name `w9-root-account-login`.
+- Filter pattern for `$.userIdentity.type = "Root"`.
+- Metric namespace `Security`.
+- Metric name `RootAccountLoginCount`.
+
+### 07 - CloudWatch Alarm
+
+Console:
+
+```text
+CloudWatch -> Alarms -> All alarms -> w9-root-account-login-alert
+```
+
+Save:
+
+```text
+evidence/screenshots/07-cloudwatch-alarm.png
+```
+
+Must show:
+
+- Alarm name.
+- Metric `Security / RootAccountLoginCount`.
+- Statistic `Sum`.
+- Period `5 minutes`.
+- Threshold `>= 1`.
+
+### 08 - Alarm SNS Action
+
+In the alarm detail page, open the actions/notifications section.
+
+Save:
+
+```text
+evidence/screenshots/08-alarm-sns-action.png
+```
+
+Must show SNS topic action for `w9-root-login-alert-topic`.
+
+### 09 - Alarm Test State
+
+After confirming the email subscription, run:
+
 ```bash
 aws cloudwatch set-alarm-state \
-  --alarm-name "w9-ec2-cpu-high-80" \
+  --alarm-name w9-root-account-login-alert \
   --state-value ALARM \
   --state-reason "W9 evidence test" \
-  --region us-east-1 \
+  --region ap-southeast-1 \
   --profile monitoring
 ```
 
-![07 - Alarm State Test](screenshots/07-alarm-state-test.png)
+Save:
 
----
-
-### 08 - Email Cảnh Báo Đã Nhận
-
-Hộp thư: `truclt0311@gmail.com`
-
-![08 - Email Alert Received](screenshots/08-email-alert-received.png)
-
----
-
-## Script CLI
-
-Đường dẫn script:
-
-```bash
-evidence/src/create_cpu_alarm_resources.sh
+```text
+evidence/screenshots/09-alarm-test-state.png
 ```
 
-Thiết lập biến và chạy:
+Must show the terminal command or CloudWatch alarm state `In alarm`.
+
+### 10 - Email Alert Received
+
+Open Gmail inbox for `truclt0311@gmail.com`.
+
+Save:
+
+```text
+evidence/screenshots/10-email-alert-received.png
+```
+
+Must show:
+
+- Email from AWS Notifications.
+- Alarm name `w9-root-account-login-alert`.
+- New state `ALARM`.
+
+## Cleanup
+
+Run cleanup only after evidence is captured.
 
 ```bash
 export AWS_PROFILE_NAME="monitoring"
-export AWS_REGION="us-east-1"
-export ALERT_EMAIL="truclt0311@gmail.com"
-export INSTANCE_ID="i-0519c8961b80e32e"
+export AWS_REGION="ap-southeast-1"
 
-./evidence/src/create_cpu_alarm_resources.sh
-```
-
-## Lệnh CLI Thủ Công (từng bước)
-
-Thiết lập biến:
-
-```bash
-export AWS_PROFILE_NAME="monitoring"
-export AWS_REGION="us-east-1"
-export ALERT_EMAIL="truclt0311@gmail.com"
-export INSTANCE_ID="i-0519c8961b80e32e"
-export TOPIC_NAME="w9-cpu-alarm-topic"
-export ALARM_NAME="w9-ec2-cpu-high-80"
-export TOPIC_ARN="arn:aws:sns:us-east-1:459858400912:w9-cpu-alarm-topic"
-```
-
-Kiểm tra danh tính:
-
-```bash
-aws sts get-caller-identity --profile "$AWS_PROFILE_NAME"
-```
-
-Tạo SNS topic:
-
-```bash
-TOPIC_ARN=$(aws sns create-topic \
-  --name "$TOPIC_NAME" \
-  --region "$AWS_REGION" \
-  --profile "$AWS_PROFILE_NAME" \
-  --query 'TopicArn' \
-  --output text)
-
-echo "$TOPIC_ARN"
-```
-
-Tạo email subscription:
-
-```bash
-aws sns subscribe \
-  --topic-arn "$TOPIC_ARN" \
-  --protocol email \
-  --notification-endpoint "$ALERT_EMAIL" \
-  --region "$AWS_REGION" \
-  --profile "$AWS_PROFILE_NAME"
-```
-
-Tạo CloudWatch alarm:
-
-```bash
-aws cloudwatch put-metric-alarm \
-  --alarm-name "$ALARM_NAME" \
-  --alarm-description "W9 evidence: send SNS email when EC2 CPUUtilization is greater than 80% for 5 minutes." \
-  --metric-name CPUUtilization \
-  --namespace AWS/EC2 \
-  --statistic Average \
-  --period 300 \
-  --threshold 80 \
-  --comparison-operator GreaterThanThreshold \
-  --dimensions "Name=InstanceId,Value=${INSTANCE_ID}" \
-  --evaluation-periods 1 \
-  --datapoints-to-alarm 1 \
-  --alarm-actions "$TOPIC_ARN" \
-  --unit Percent \
-  --treat-missing-data missing \
-  --region "$AWS_REGION" \
-  --profile "$AWS_PROFILE_NAME"
-```
-
-Kiểm tra alarm:
-
-```bash
-aws cloudwatch describe-alarms \
-  --alarm-names "$ALARM_NAME" \
-  --region "$AWS_REGION" \
-  --profile "$AWS_PROFILE_NAME"
-```
-
-## Test & Reset Alarm
-
-Test kích hoạt cảnh báo:
-
-```bash
-aws cloudwatch set-alarm-state \
-  --alarm-name "w9-ec2-cpu-high-80" \
-  --state-value ALARM \
-  --state-reason "W9 evidence test" \
-  --region us-east-1 \
-  --profile monitoring
-```
-
-Reset về OK sau khi chụp bằng chứng:
-
-```bash
-aws cloudwatch set-alarm-state \
-  --alarm-name "w9-ec2-cpu-high-80" \
-  --state-value OK \
-  --state-reason "W9 evidence reset" \
-  --region us-east-1 \
-  --profile monitoring
-```
-
-## Dọn Dẹp Tài Nguyên
-
-> Chỉ chạy sau khi đã chụp đủ bằng chứng.
-
-```bash
 aws cloudwatch delete-alarms \
-  --alarm-names "w9-ec2-cpu-high-80" \
-  --region us-east-1 \
-  --profile monitoring
+  --alarm-names w9-root-account-login-alert \
+  --region "$AWS_REGION" \
+  --profile "$AWS_PROFILE_NAME"
 
-aws sns delete-topic \
-  --topic-arn "arn:aws:sns:us-east-1:459858400912:w9-cpu-alarm-topic" \
-  --region us-east-1 \
-  --profile monitoring
+aws logs delete-metric-filter \
+  --log-group-name /aws/cloudtrail/w9-root-login \
+  --filter-name w9-root-account-login \
+  --region "$AWS_REGION" \
+  --profile "$AWS_PROFILE_NAME"
+
+aws cloudtrail stop-logging \
+  --name w9-root-login-trail \
+  --region "$AWS_REGION" \
+  --profile "$AWS_PROFILE_NAME"
 ```
 
-## Tài Liệu Tham Khảo AWS
+Do not delete the CloudTrail S3 bucket until you no longer need audit logs for the submission.
 
-- [AWS CloudWatch - Create a CPU usage alarm using AWS CLI](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/US_AlarmAtThresholdEC2.html)
-- [AWS CloudWatch PutMetricAlarm](https://docs.aws.amazon.com/cli/latest/reference/cloudwatch/put-metric-alarm.html)
-- [AWS SNS Subscribe](https://docs.aws.amazon.com/cli/latest/reference/sns/subscribe.html)
+## References
+
+- AWS Security Blog: receive notifications when AWS root credentials are used.
+- AWS Security Hub CloudWatch.1: metric filter and alarm should exist for root user usage.

@@ -1,0 +1,11 @@
+{
+    "Name": "w9-root-login-trail",
+    "S3BucketName": "w9-cloudtrail-459858400912-ap-southeast-1",
+    "IncludeGlobalServiceEvents": true,
+    "IsMultiRegionTrail": true,
+    "TrailARN": "arn:aws:cloudtrail:ap-southeast-1:459858400912:trail/w9-root-login-trail",
+    "LogFileValidationEnabled": false,
+    "CloudWatchLogsLogGroupArn": "arn:aws:logs:ap-southeast-1:459858400912:log-group:/aws/cloudtrail/w9-root-login:*",
+    "CloudWatchLogsRoleArn": "arn:aws:iam::459858400912:role/w9-cloudtrail-cloudwatch-role",
+    "IsOrganizationTrail": false
+}

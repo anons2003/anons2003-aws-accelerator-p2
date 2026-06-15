@@ -1,0 +1,21 @@
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "w9-cloudtrail-cloudwatch-role",
+        "RoleId": "AROAWWENSK2IOIJSQ7HCK",
+        "Arn": "arn:aws:iam::459858400912:role/w9-cloudtrail-cloudwatch-role",
+        "CreateDate": "2026-06-15T15:12:24+00:00",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "cloudtrail.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }
+    }
+}

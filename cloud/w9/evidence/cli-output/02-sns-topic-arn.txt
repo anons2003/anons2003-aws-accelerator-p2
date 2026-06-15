@@ -1,0 +1,1 @@
+arn:aws:sns:ap-southeast-1:459858400912:w9-root-login-alert-topic
