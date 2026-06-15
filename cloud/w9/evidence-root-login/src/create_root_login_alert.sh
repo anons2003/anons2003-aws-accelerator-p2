@@ -22,7 +22,7 @@ FILTER_NAME="${FILTER_NAME:-w9-root-account-login}"
 METRIC_NAMESPACE="${METRIC_NAMESPACE:-Security}"
 METRIC_NAME="${METRIC_NAME:-RootAccountLoginCount}"
 ALARM_NAME="${ALARM_NAME:-w9-root-account-login-alert}"
-OUTPUT_DIR="${OUTPUT_DIR:-evidence/cli-output}"
+OUTPUT_DIR="${OUTPUT_DIR:-evidence-root-login/cli-output}"
 
 mkdir -p "$OUTPUT_DIR"
 
@@ -300,7 +300,7 @@ Created or updated root login alert resources:
 
 Next steps:
 1. Confirm the SNS subscription email sent to ${ALERT_EMAIL}.
-2. Capture the screenshots listed in evidence/evidence-pack.md.
+2. Capture the screenshots listed in evidence-root-login/evidence-pack.md.
 3. For a safe alarm-delivery test, use CloudWatch set-alarm-state before doing any real root-account login test:
    aws cloudwatch set-alarm-state --alarm-name ${ALARM_NAME} --state-value ALARM --state-reason "W9 evidence test" --region ${AWS_REGION} --profile ${AWS_PROFILE_NAME}
 EOF

@@ -12,6 +12,6 @@ Created or updated root login alert resources:
 
 Next steps:
 1. Confirm the SNS subscription email sent to truclt0311@gmail.com.
-2. Capture the screenshots listed in evidence/evidence-pack.md.
+2. Capture the screenshots listed in evidence-root-login/evidence-pack.md.
 3. For a safe alarm-delivery test, use CloudWatch set-alarm-state before doing any real root-account login test:
    aws cloudwatch set-alarm-state --alarm-name w9-root-account-login-alert --state-value ALARM --state-reason "W9 evidence test" --region ap-southeast-1 --profile monitoring
