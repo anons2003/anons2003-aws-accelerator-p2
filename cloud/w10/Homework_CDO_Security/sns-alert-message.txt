@@ -1,0 +1,12 @@
+Homework_CDO_Security - Amazon Macie Alert
+
+Amazon Macie detected sensitive data in an S3 object.
+
+Finding ID: 09996d464423da7d9633f74d3ec8bc6c
+Finding type: SensitiveData:S3Object/Personal
+Severity: Medium
+Bucket: homework-cdo-security-macie-325137989598-20260619152121
+Object: sample-data/customers.csv
+Region: ap-southeast-1
+
+Action required: Review the Macie finding and protect or remove sensitive data as needed.
